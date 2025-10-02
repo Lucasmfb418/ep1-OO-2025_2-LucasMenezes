@@ -29,9 +29,8 @@ public class Paciente extends Pessoa {
     }
 
     public double calcularDesconto(Consulta consulta) {
-        // Paciente comum não tem desconto
         if(this.getIdade() >= 60) {
-            return consulta.getMedico().getCusto() * 0.1; // 10% de desconto para idosos
+            return consulta.getMedico().getCusto() * 0.1;
         }
         return 0;
     }
