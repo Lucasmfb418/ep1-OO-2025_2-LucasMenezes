@@ -30,7 +30,7 @@ public class Hospital {
 
     public void carregarDados(){
         planos = GerenciadorDeArquivos.carregarPlanos(camPlanos);
-        pacientes = GerenciadorDeArquivos.carregarPacientes(camPacientes);
+        pacientes = GerenciadorDeArquivos.carregarPacientes(camPacientes, planos);
         medicos = GerenciadorDeArquivos.carregarMedicos(camMedicos);
         consultas = GerenciadorDeArquivos.carregarConsultas(camConsultas, pacientes, medicos);
         internacoes = GerenciadorDeArquivos.carregarInternacoes(camInternacoes, pacientes, medicos);
@@ -118,68 +118,81 @@ public class Hospital {
         System.out.println("Plano de saúde cadastrado com sucesso!");
     }
 
-    public void agendarConsulta(Scanner sc) {
-        System.out.println("\n--- Agendar Consulta ---");
+public void agendarConsulta(Scanner sc) {
+    System.out.println("\n--- Agendar Consulta ---");
 
-        if(pacientes.isEmpty() || medicos.isEmpty()) {
-            System.out.println("É necessário cadastrar pacientes e médicos primeiro!");
+    if (pacientes.isEmpty() || medicos.isEmpty()) {
+        System.out.println("É necessário cadastrar pacientes e médicos primeiro!");
+        return;
+    }
+
+    System.out.println("Pacientes:");
+    for (int i = 0; i < pacientes.size(); i++) {
+        System.out.println(i + ". " + pacientes.get(i).getNome());
+    }
+
+    Paciente pacienteSelecionado = null;
+    while (pacienteSelecionado == null) {
+        try {
+            System.out.print("Escolha o paciente pelo índice: ");
+            int idxPaciente = sc.nextInt();
+            sc.nextLine();
+            if (idxPaciente >= 0 && idxPaciente < pacientes.size()) {
+                pacienteSelecionado = pacientes.get(idxPaciente);
+            } else {
+                System.out.println("Índice inválido. Por favor, escolha um número da lista.");
+            }
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Entrada inválida. Por favor, digite um número.");
+            sc.nextLine();
+        }
+    }
+
+    System.out.println("Médicos:");
+    for (int i = 0; i < medicos.size(); i++) {
+        System.out.println(i + ". " + medicos.get(i).getNome() + " (" + medicos.get(i).getEspecialidade() + ")");
+    }
+
+    Medico medicoSelecionado = null;
+    while (medicoSelecionado == null) {
+        try {
+            System.out.print("Escolha o médico pelo índice: ");
+            int idxMedico = sc.nextInt();
+            sc.nextLine();
+            if (idxMedico >= 0 && idxMedico < medicos.size()) {
+                medicoSelecionado = medicos.get(idxMedico);
+            } else {
+                System.out.println("Índice inválido. Por favor, escolha um número da lista.");
+            }
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Entrada inválida. Por favor, digite um número.");
+            sc.nextLine();
+        }
+    }
+
+    System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
+    String dataHoraStr = sc.nextLine();
+    LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+
+    System.out.print("Local da consulta: ");
+    String local = sc.nextLine();
+
+    for (Consulta c : consultas) {
+        if (c.getMedico().equals(medicoSelecionado) && c.getDataHora().equals(dataHora)) {
+            System.out.println("Erro: Esse médico já possui consulta nesse horário!");
             return;
         }
-
-        System.out.println("Pacientes:");
-        for(int i=0;i<pacientes.size();i++){
-            System.out.println(i + ". " + pacientes.get(i).getNome());
+        if (c.getLocal().equalsIgnoreCase(local) && c.getDataHora().equals(dataHora)) {
+            System.out.println("Erro: O local já está ocupado nesse horário!");
+            return;
         }
-
-        int idxPac = -1;
-        Paciente p = null;
-        while (p == null) {
-            try {
-                System.out.print("Escolha o paciente pelo índice: ");
-                idxPac = sc.nextInt();
-                sc.nextLine();
-                if (idxPac >= 0 && idxPac < pacientes.size()) {
-                    p = pacientes.get(idxPac);
-                } else {
-                    System.out.println("Índice inválido. Por favor, escolha um número da lista.");
-                }
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, digite um número.");
-                sc.nextLine();
-            }
-        }
-
-        System.out.println("Médicos:");
-        for(int i=0;i<medicos.size();i++){
-            System.out.println(i + ". " + medicos.get(i).getNome() + " (" + medicos.get(i).getEspecialidade() + ")");
-        }
-        System.out.print("Escolha o médico pelo índice: ");
-        int idxMedico = sc.nextInt();
-        sc.nextLine();
-
-        System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
-        String dataHoraStr = sc.nextLine();
-        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-
-        System.out.print("Local da consulta: ");
-        String local = sc.nextLine();
-
-        for(Consulta c : consultas) {
-            if(c.getMedico().equals(medicos.get(idxMedico)) && c.getDataHora().equals(dataHora)) {
-                System.out.println("Erro: Esse médico já possui consulta nesse horário!");
-                return;
-            }
-            if(c.getLocal().equalsIgnoreCase(local) && c.getDataHora().equals(dataHora)) {
-                System.out.println("Erro:O local já está ocupado nesse horário!");
-                return;
-            }
-        }
-
-        Consulta consulta = new Consulta(pacientes.get(idxPaciente), medicos.get(idxMedico), dataHora, local);
-        consultas.add(consulta);
-        pacientes.get(idxPaciente).adicionarConsulta(consulta);
-        System.out.println("Consulta agendada com sucesso!");
     }
+
+    Consulta consulta = new Consulta(pacienteSelecionado, medicoSelecionado, dataHora, local);
+    consultas.add(consulta);
+    pacienteSelecionado.adicionarConsulta(consulta);
+    System.out.println("Consulta agendada com sucesso!");
+}
 
     public void concluirConsulta(Scanner sc) {
         System.out.println("\n--- Concluir Consulta ---");
