@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Paciente extends Pessoa {
     private ArrayList<Consulta> historicoConsultas;
-    private ArrayList<Internacao> historicoInternacoes;
+    private ArrayList<Internacoes> historicoInternacoes;
 
     public Paciente(String nome, String cpf, int idade) {
         super(nome, cpf, idade);
@@ -16,7 +16,7 @@ public class Paciente extends Pessoa {
         historicoConsultas.add(c);
     }
 
-    public void adicionarInternacao(Internacao i) {
+    public void adicionarInternacoes(Internacoes i) {
         historicoInternacoes.add(i);
     }
 
@@ -24,7 +24,7 @@ public class Paciente extends Pessoa {
         return historicoConsultas;
     }
 
-    public ArrayList<Internacao> getHistoricoInternacoes() {
+    public ArrayList<Internacoes> getHistoricoInternacoes() {
         return historicoInternacoes;
     }
 
