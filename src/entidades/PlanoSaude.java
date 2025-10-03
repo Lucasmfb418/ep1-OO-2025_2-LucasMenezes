@@ -24,7 +24,7 @@ public class PlanoSaude{
         return descontos.getOrDefault(especialidade, 0.0);
     }
 
-    public Map<Object, Object> getDescontos(){
-        return Map.of();
+    public HashMap<String, Double> getDescontos(){
+        return descontos;
     }
 }

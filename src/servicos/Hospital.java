@@ -29,9 +29,9 @@ public class Hospital {
     }
 
     public void carregarDados(){
+        planos = GerenciadorDeArquivos.carregarPlanos(camPlanos);
         pacientes = GerenciadorDeArquivos.carregarPacientes(camPacientes);
         medicos = GerenciadorDeArquivos.carregarMedicos(camMedicos);
-        planos = GerenciadorDeArquivos.carregarPlanos(camPlanos);
         consultas = GerenciadorDeArquivos.carregarConsultas(camConsultas, pacientes, medicos);
         internacoes = GerenciadorDeArquivos.carregarInternacoes(camInternacoes, pacientes, medicos);
     }
@@ -50,9 +50,21 @@ public class Hospital {
         String nome = sc.nextLine();
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
-        System.out.print("Idade: ");
-        int idade = sc.nextInt();
-        sc.nextLine();
+
+        int idade = 0;
+        boolean entradaValida = false;
+        while (!entradaValida) {
+            try {
+                System.out.print("Idade: ");
+                idade = sc.nextInt();
+                sc.nextLine();
+                entradaValida = true;
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número para a idade.");
+                sc.nextLine();
+            }
+        }
+
         System.out.println("O paciente possui um plano de saúde? (s/n): ");
         String temPlano = sc.nextLine();
         
@@ -118,9 +130,24 @@ public class Hospital {
         for(int i=0;i<pacientes.size();i++){
             System.out.println(i + ". " + pacientes.get(i).getNome());
         }
-        System.out.print("Escolha o paciente pelo índice: ");
-        int idxPaciente = sc.nextInt();
-        sc.nextLine();
+
+        int idxPac = -1;
+        Paciente p = null;
+        while (p == null) {
+            try {
+                System.out.print("Escolha o paciente pelo índice: ");
+                idxPac = sc.nextInt();
+                sc.nextLine();
+                if (idxPac >= 0 && idxPac < pacientes.size()) {
+                    p = pacientes.get(idxPac);
+                } else {
+                    System.out.println("Índice inválido. Por favor, escolha um número da lista.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número.");
+                sc.nextLine();
+            }
+        }
 
         System.out.println("Médicos:");
         for(int i=0;i<medicos.size();i++){
