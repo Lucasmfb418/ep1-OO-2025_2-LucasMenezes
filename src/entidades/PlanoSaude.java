@@ -1,7 +1,6 @@
 package entidades;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class PlanoSaude{
     private String nome;

@@ -2,11 +2,6 @@
 
 import java.util.Scanner;
 import servicos.Hospital;
-import entidades.Paciente;
-import entidades.Medico;
-import entidades.PlanoSaude;
-import entidades.Consulta;
-import entidades.Internacao;
 
 public class Main {
     public static void main(String[] args) {
