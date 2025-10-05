@@ -1,8 +1,8 @@
 
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import servicos.Hospital;
-
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -24,37 +24,43 @@ public class Main {
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            try{
+                opcao = scanner.nextInt();
+                scanner.nextLine();
 
-            switch(opcao) {
-                case 1:
-                    hospital.cadastrarPaciente(scanner);
-                    break;
-                case 2:
-                    hospital.cadastrarMedico(scanner);
-                    break;
-                case 3:
-                    hospital.cadastrarPlano(scanner);
-                    break;
-                case 4:
-                    hospital.agendarConsulta(scanner);
-                    break;
-                case 5:
-                    hospital.concluirConsulta(scanner);
-                    break;
-                case 6:
-                    hospital.gerenciarInternacoes(scanner);
-                    break;
-                case 7:
-                    hospital.gerarRelatorios(scanner);
-                    break;
-                case 0:
-                    System.out.println("Saindo do sistema...");
-                    hospital.salvarDados();
-                    break;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                switch(opcao) {
+                    case 1:
+                        hospital.cadastrarPaciente(scanner);
+                        break;
+                    case 2:
+                        hospital.cadastrarMedico(scanner);
+                        break;
+                    case 3:
+                        hospital.cadastrarPlano(scanner);
+                        break;
+                    case 4:
+                        hospital.agendarConsulta(scanner);
+                        break;
+                    case 5:
+                        hospital.concluirConsulta(scanner);
+                        break;
+                    case 6:
+                        hospital.gerenciarInternacoes(scanner);
+                        break;
+                    case 7:
+                        hospital.gerarRelatorios(scanner);
+                        break;
+                    case 0:
+                        System.out.println("Saindo do sistema...");
+                        hospital.salvarDados();
+                        break;
+                    default:
+                        System.out.println("Opção inválida! Tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("\nERRO: Entrada inválida. Por favor, digite apenas um dos NÚMEROS do menu.");
+                scanner.nextLine();
+                opcao = -1;
             }
         }
 

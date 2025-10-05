@@ -70,6 +70,13 @@ public class Hospital {
         String temPlano = sc.nextLine();
         
         if(temPlano.equalsIgnoreCase("s")) {
+            if (planos.isEmpty()) {
+                System.out.println("ERRO: Nenhum plano de saúde cadastrado. Por favor, cadastre um plano primeiro usando a opção 3 do menu.");
+                Paciente p = new Paciente(nome, cpf, idade);
+                pacientes.add(p);
+                System.out.println("Paciente cadastrado como 'Comum', pois não há planos disponíveis.");
+                return;
+            }
             System.out.println("Planos disponíveis:");
             for(int i=0; i<planos.size(); i++){
                 System.out.println(i + ". " + planos.get(i).getNome());
