@@ -1,6 +1,8 @@
 package entidades;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlanoSaude{
     private String nome;
@@ -23,7 +25,7 @@ public class PlanoSaude{
         return descontos.getOrDefault(especialidade, 0.0);
     }
 
-    public HashMap<String, Double> getDescontos(){
-        return descontos;
+     public Map<String, Double> getDescontos(){
+        return Collections.unmodifiableMap(descontos);
     }
 }

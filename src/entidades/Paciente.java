@@ -1,6 +1,8 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 public class Paciente extends Pessoa {
     private ArrayList<Consulta> historicoConsultas;
@@ -20,12 +22,12 @@ public class Paciente extends Pessoa {
         historicoInternacoes.add(i);
     }
 
-    public ArrayList<Consulta> getHistoricoConsultas() {
-        return historicoConsultas;
+    public List<Consulta> getHistoricoConsultas() {
+        return Collections.unmodifiableList(historicoConsultas);
     }
 
-    public ArrayList<Internacao> getHistoricoInternacoes() {
-        return historicoInternacoes;
+    public List<Internacao> getHistoricoInternacoes() {
+        return Collections.unmodifiableList(historicoInternacoes);
     }
 
     public double calcularDesconto(Consulta consulta) {

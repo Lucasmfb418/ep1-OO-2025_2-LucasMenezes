@@ -1,6 +1,8 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Medico extends Pessoa {
     private String crm;
@@ -28,8 +30,8 @@ public class Medico extends Pessoa {
         return custo;
     }
 
-    public ArrayList<Consulta> getAgenda(){
-        return agenda;
+   public List<Consulta> getAgenda(){
+        return Collections.unmodifiableList(agenda);
     }
 
     public void adicionarConsulta(Consulta c){
