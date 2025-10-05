@@ -10,6 +10,7 @@ public class Consulta{
     private String status;
     private String diagnostico;
     private String prescricao;
+    private double valorEconomizado;
 
     public Consulta(Paciente paciente, Medico medico, LocalDateTime dataHora, String local){
         this.paciente = paciente;
@@ -19,6 +20,15 @@ public class Consulta{
         this.status = "Agenda";
         this.diagnostico = "";
         this.prescricao = "";
+        this.valorEconomizado = 0.0;
+    }
+
+     public double getValorEconomizado() {
+        return valorEconomizado;
+    }
+
+    public void setValorEconomizado(double valorEconomizado) {
+        this.valorEconomizado = valorEconomizado;
     }
 
     public Paciente getPaciente(){
@@ -60,4 +70,6 @@ public class Consulta{
     public void setPrescricao(String prescricao) {
         this.prescricao = prescricao;
     }
+
+
 }

@@ -7,16 +7,27 @@ import java.util.Map;
 public class PlanoSaude{
     private String nome;
     private HashMap<String, Double> descontos;
+    private boolean planoEspecialDeInternacao;
+
 
     public PlanoSaude(String nome){
         this.nome = nome;
         this.descontos = new HashMap<>();
+        this.planoEspecialDeInternacao = false;
     }
 
-    public String getNome(){
+    public boolean isPlanoEspecialDeInternacao() {
+        return planoEspecialDeInternacao;
+    }
+
+    public void setPlanoEspecialDeInternacao(boolean planoEspecialDeInternacao) {
+        this.planoEspecialDeInternacao = planoEspecialDeInternacao;
+    }
+
+    public String getNome() {
         return nome;
     }
-
+    
     public void adicionarDesconto(String especialidade, double desconto){
         descontos.put(especialidade, desconto);
     }

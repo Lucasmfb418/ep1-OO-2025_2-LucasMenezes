@@ -15,10 +15,13 @@ public class PacienteEspecial extends Paciente {
     @Override
     public double calcularDesconto(Consulta consulta) {
         double descontoPlano = 0;
+        double custoConsulta = consulta.getMedico().getCusto(); // Pega o custo total
+
         if (plano !=  null) {
-            descontoPlano = plano.getDesconto(consulta.getMedico().getEspecialidade());
+            double percentualDesconto = plano.getDesconto(consulta.getMedico().getEspecialidade());
+            descontoPlano = custoConsulta * (percentualDesconto / 100.0);
         }
-        double descontoIdoso = getIdade() >= 60 ? consulta.getMedico().getCusto() * 0.1 : 0;
+        double descontoIdoso = getIdade() >= 60 ? custoConsulta * 0.1 : 0;
         return descontoPlano + descontoIdoso;
     }
 }

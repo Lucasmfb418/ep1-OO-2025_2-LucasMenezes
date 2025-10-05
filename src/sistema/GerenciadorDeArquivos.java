@@ -88,11 +88,15 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
             while((linha = br.readLine()) != null) {
                 String[] dados = linha.split(";");
                 PlanoSaude plano = new PlanoSaude(dados[0]);
-                for(int i=1;i<dados.length;i+=2){
-                    String especialidade = dados[i];
-                    double desconto = Double.parseDouble(dados[i+1]);
-                    plano.adicionarDesconto(especialidade, desconto);
-                }
+                for(int i=1;i<dados.length - 1; i +=2){
+                    if (i + 1 < dados.length - 1) {
+                        String especialidade = dados[i];
+                        double desconto = Double.parseDouble(dados[i+1]);
+                        plano.adicionarDesconto(especialidade, desconto);
+                    }
+                }   
+                boolean ehEspecial = Boolean.parseBoolean(dados[dados.length - 1]);
+                plano.setPlanoEspecialDeInternacao(ehEspecial);
                 lista.add(plano);
             }
         } catch (IOException e) {
@@ -109,6 +113,7 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
                 for(Map.Entry<String, Double> entry : p.getDescontos().entrySet()) {
                     sb.append(";").append(entry.getKey()).append(";").append(entry.getValue());
                 }
+                sb.append(";").append(p.isPlanoEspecialDeInternacao());
                 pw.println(sb.toString());
             }
         } catch (IOException e) {

@@ -56,4 +56,8 @@ public class Internacao {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void setCusto(double custo) {
+    this.custo = custo;
+    }
 }

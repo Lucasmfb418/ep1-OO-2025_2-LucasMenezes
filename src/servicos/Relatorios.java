@@ -130,7 +130,18 @@ public class Relatorios {
         System.out.println("\n--- Pessoas por Plano de Saúde ---");
         for(PlanoSaude p : planos) {
             long count = pacientes.stream().filter(pa -> pa instanceof PacienteEspecial && ((PacienteEspecial)pa).getPlano().equals(p)).count();
-            System.out.println("Plano: " + p.getNome() + ", Quantidade de pessoas: " + count);
+            double totalEconomizado = 0;
+            for (Paciente pac : pacientes) {
+                if (pac instanceof PacienteEspecial && ((PacienteEspecial) pac).getPlano().equals(p)) {
+                    for (Consulta c : pac.getHistoricoConsultas()) {
+                        totalEconomizado += c.getValorEconomizado();
+                    }
+                }
+            }
+
+            System.out.println("Plano: " + p.getNome());
+            System.out.println("  - Quantidade de pessoas: " + count);
+            System.out.printf("  - Total economizado pelos usuários: R$ %.2f\n\n", totalEconomizado);
         }
     }
 }

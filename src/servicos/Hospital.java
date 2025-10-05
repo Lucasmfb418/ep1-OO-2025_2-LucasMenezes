@@ -5,7 +5,8 @@ import java.util.Scanner;
 import entidades.*;
 import sistema.GerenciadorDeArquivos;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;;
+import java.time.format.DateTimeFormatter;
+import java.time.Duration;
 
 public class Hospital {
     private ArrayList<Paciente> pacientes;
@@ -107,92 +108,114 @@ public class Hospital {
         System.out.println("\n--- Cadastro de Plano de Saúde ---");
         System.out.print("Nome do plano: ");
         String nome = sc.nextLine();
-        System.out.print("Desconto para especialidade (ex: Cardiologia 20): ");
-        String[] input = sc.nextLine().split(" ");
-        String especialidade = input[0];
-        double desconto = Double.parseDouble(input[1]);
-
         PlanoSaude plano = new PlanoSaude(nome);
-        plano.adicionarDesconto(especialidade, desconto);
+        while (true) {
+            System.out.print("Deseja adicionar um desconto para uma especialidade? (s/n): ");
+            if (sc.nextLine().equalsIgnoreCase("n")) {
+                break;
+            }
+            System.out.print("Digite a especialidade: ");
+            String especialidade = sc.nextLine();
+            System.out.print("Digite o percentual de desconto (ex: 20 para 20%): ");
+            double desconto = sc.nextDouble();
+            sc.nextLine();
+            plano.adicionarDesconto(especialidade, desconto);
+        }
+    
+        System.out.print("Este plano oferece internação gratuita por até 7 dias? (s/n): ");
+        String resposta = sc.nextLine();
+        if (resposta.equalsIgnoreCase("s")) {
+            plano.setPlanoEspecialDeInternacao(true);
+        }
+
         planos.add(plano);
         System.out.println("Plano de saúde cadastrado com sucesso!");
     }
 
-public void agendarConsulta(Scanner sc) {
-    System.out.println("\n--- Agendar Consulta ---");
+    public void agendarConsulta(Scanner sc) {
+        System.out.println("\n--- Agendar Consulta ---");
 
-    if (pacientes.isEmpty() || medicos.isEmpty()) {
-        System.out.println("É necessário cadastrar pacientes e médicos primeiro!");
-        return;
-    }
-
-    System.out.println("Pacientes:");
-    for (int i = 0; i < pacientes.size(); i++) {
-        System.out.println(i + ". " + pacientes.get(i).getNome());
-    }
-
-    Paciente pacienteSelecionado = null;
-    while (pacienteSelecionado == null) {
-        try {
-            System.out.print("Escolha o paciente pelo índice: ");
-            int idxPaciente = sc.nextInt();
-            sc.nextLine();
-            if (idxPaciente >= 0 && idxPaciente < pacientes.size()) {
-                pacienteSelecionado = pacientes.get(idxPaciente);
-            } else {
-                System.out.println("Índice inválido. Por favor, escolha um número da lista.");
-            }
-        } catch (java.util.InputMismatchException e) {
-            System.out.println("Entrada inválida. Por favor, digite um número.");
-            sc.nextLine();
-        }
-    }
-
-    System.out.println("Médicos:");
-    for (int i = 0; i < medicos.size(); i++) {
-        System.out.println(i + ". " + medicos.get(i).getNome() + " (" + medicos.get(i).getEspecialidade() + ")");
-    }
-
-    Medico medicoSelecionado = null;
-    while (medicoSelecionado == null) {
-        try {
-            System.out.print("Escolha o médico pelo índice: ");
-            int idxMedico = sc.nextInt();
-            sc.nextLine();
-            if (idxMedico >= 0 && idxMedico < medicos.size()) {
-                medicoSelecionado = medicos.get(idxMedico);
-            } else {
-                System.out.println("Índice inválido. Por favor, escolha um número da lista.");
-            }
-        } catch (java.util.InputMismatchException e) {
-            System.out.println("Entrada inválida. Por favor, digite um número.");
-            sc.nextLine();
-        }
-    }
-
-    System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
-    String dataHoraStr = sc.nextLine();
-    LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-
-    System.out.print("Local da consulta: ");
-    String local = sc.nextLine();
-
-    for (Consulta c : consultas) {
-        if (c.getMedico().equals(medicoSelecionado) && c.getDataHora().equals(dataHora)) {
-            System.out.println("Erro: Esse médico já possui consulta nesse horário!");
+        if (pacientes.isEmpty() || medicos.isEmpty()) {
+            System.out.println("É necessário cadastrar pacientes e médicos primeiro!");
             return;
         }
-        if (c.getLocal().equalsIgnoreCase(local) && c.getDataHora().equals(dataHora)) {
-            System.out.println("Erro: O local já está ocupado nesse horário!");
-            return;
-        }
-    }
 
-    Consulta consulta = new Consulta(pacienteSelecionado, medicoSelecionado, dataHora, local);
-    consultas.add(consulta);
-    pacienteSelecionado.adicionarConsulta(consulta);
-    System.out.println("Consulta agendada com sucesso!");
-}
+        System.out.println("Pacientes:");
+        for (int i = 0; i < pacientes.size(); i++) {
+            System.out.println(i + ". " + pacientes.get(i).getNome());
+        }
+
+        Paciente pacienteSelecionado = null;
+        while (pacienteSelecionado == null) {
+            try {
+                System.out.print("Escolha o paciente pelo índice: ");
+                int idxPaciente = sc.nextInt();
+                sc.nextLine();
+                if (idxPaciente >= 0 && idxPaciente < pacientes.size()) {
+                    pacienteSelecionado = pacientes.get(idxPaciente);
+                } else {
+                    System.out.println("Índice inválido. Por favor, escolha um número da lista.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número.");
+                sc.nextLine();
+            }
+        }
+
+        System.out.println("Médicos:");
+        for (int i = 0; i < medicos.size(); i++) {
+            System.out.println(i + ". " + medicos.get(i).getNome() + " (" + medicos.get(i).getEspecialidade() + ")");
+        }
+
+        Medico medicoSelecionado = null;
+        while (medicoSelecionado == null) {
+            try {
+                System.out.print("Escolha o médico pelo índice: ");
+                int idxMedico = sc.nextInt();
+                sc.nextLine();
+                if (idxMedico >= 0 && idxMedico < medicos.size()) {
+                    medicoSelecionado = medicos.get(idxMedico);
+                } else {
+                    System.out.println("Índice inválido. Por favor, escolha um número da lista.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número.");
+                sc.nextLine();
+            }
+        }
+
+        System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
+        String dataHoraStr = sc.nextLine();
+        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+
+        System.out.print("Local da consulta: ");
+        String local = sc.nextLine();
+
+        for (Consulta c : consultas) {
+            if (c.getMedico().equals(medicoSelecionado) && c.getDataHora().equals(dataHora)) {
+                System.out.println("Erro: Esse médico já possui consulta nesse horário!");
+                return;
+            }
+            if (c.getLocal().equalsIgnoreCase(local) && c.getDataHora().equals(dataHora)) {
+                System.out.println("Erro: O local já está ocupado nesse horário!");
+                return;
+            }
+        }
+
+        Consulta consulta = new Consulta(pacienteSelecionado, medicoSelecionado, dataHora, local);
+        
+        double desconto = pacienteSelecionado.calcularDesconto(consulta);
+        consulta.setValorEconomizado(desconto);
+    
+        if (desconto > 0) {
+            System.out.printf("INFO: Desconto de R$ %.2f aplicado com sucesso!\n", desconto);
+        }
+
+        consultas.add(consulta);
+        pacienteSelecionado.adicionarConsulta(consulta);
+        medicoSelecionado.adicionarConsulta(consulta);
+        System.out.println("Consulta agendada com sucesso!");
+    }
 
     public void concluirConsulta(Scanner sc) {
         System.out.println("\n--- Concluir Consulta ---");
@@ -322,6 +345,23 @@ public void agendarConsulta(Scanner sc) {
 
         ativas.get(idx).setDataSaida(saida);
         ativas.get(idx).setStatus("Encerrada");
+        Paciente pacienteDaInternacao = ativas.get(idx).getPaciente();
+    // Verifica se o paciente é especial
+        if (pacienteDaInternacao instanceof PacienteEspecial) {
+            PacienteEspecial pe = (PacienteEspecial) pacienteDaInternacao;
+            // Verifica se o plano dele é especial
+            if (pe.getPlano().isPlanoEspecialDeInternacao()) {
+                // Calcula a duração
+                Duration duracao = Duration.between(ativas.get(idx).getDataEntrada(), saida);
+                long dias = duracao.toDays();
+                
+                // Se durar menos de 7 dias, o custo é zerado
+                if (dias < 7) {
+                    System.out.println("INFO: Plano especial ativado! Custo da internação zerado.");
+                    ativas.get(idx).setCusto(0.0);
+                }
+            }
+        }
         System.out.println("Internação encerrada com sucesso!");
     }
 
