@@ -91,6 +91,7 @@ public class Hospital {
             pacientes.add(p);
             System.out.println("Paciente cadastrado com sucesso!");
         }
+        GerenciadorDeArquivos.salvarPacientes(camPacientes, pacientes);
     }
 
     public void cadastrarMedico(Scanner sc) {
@@ -106,6 +107,7 @@ public class Hospital {
         Medico m = new Medico(nome, crm, especialidade, custo);
         medicos.add(m);
         System.out.println("Médico cadastrado com sucesso!");
+        GerenciadorDeArquivos.salvarMedicos(camMedicos, medicos);
     }
 
     public void cadastrarPlano(Scanner sc) {
@@ -134,6 +136,7 @@ public class Hospital {
 
         planos.add(plano);
         System.out.println("Plano de saúde cadastrado com sucesso!");
+        GerenciadorDeArquivos.salvarPlanos(camPlanos, planos);  
     }
 
     public void agendarConsulta(Scanner sc) {
@@ -219,6 +222,7 @@ public class Hospital {
         pacienteSelecionado.adicionarConsulta(consulta);
         medicoSelecionado.adicionarConsulta(consulta);
         System.out.println("Consulta agendada com sucesso!");
+        GerenciadorDeArquivos.salvarConsultas(camConsultas, consultas);
     }
 
     public void concluirConsulta(Scanner sc) {
@@ -253,6 +257,7 @@ public class Hospital {
         pendentes.get(idx).setPrescricao(presc);
         pendentes.get(idx).setStatus("Concluída");
         System.out.println("Consulta concluída com sucesso!");
+        GerenciadorDeArquivos.salvarConsultas(camConsultas, consultas);
     }
 
     public void gerenciarInternacoes(Scanner sc) {
@@ -322,6 +327,7 @@ public class Hospital {
         Internacao interna = new Internacao(pacientes.get(idxPaciente), medicos.get(idxMedico), entrada, null, quarto, custo);
         internacoes.add(interna);
         System.out.println("Internação registrada com sucesso!");
+        GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
     private void encerrarInternacoes(Scanner sc) {
@@ -350,16 +356,11 @@ public class Hospital {
         ativas.get(idx).setDataSaida(saida);
         ativas.get(idx).setStatus("Encerrada");
         Paciente pacienteDaInternacao = ativas.get(idx).getPaciente();
-    // Verifica se o paciente é especial
         if (pacienteDaInternacao instanceof PacienteEspecial) {
             PacienteEspecial pe = (PacienteEspecial) pacienteDaInternacao;
-            // Verifica se o plano dele é especial
             if (pe.getPlano().isPlanoEspecialDeInternacao()) {
-                // Calcula a duração
                 Duration duracao = Duration.between(ativas.get(idx).getDataEntrada(), saida);
                 long dias = duracao.toDays();
-                
-                // Se durar menos de 7 dias, o custo é zerado
                 if (dias < 7) {
                     System.out.println("INFO: Plano especial ativado! Custo da internação zerado.");
                     ativas.get(idx).setCusto(0.0);
@@ -367,6 +368,7 @@ public class Hospital {
             }
         }
         System.out.println("Internação encerrada com sucesso!");
+        GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
     private void cancelarInternacoes(Scanner sc) {
@@ -385,6 +387,7 @@ public class Hospital {
 
         internacoes.get(idx).setStatus("Cancelada");
         System.out.println("Internação cancelada com sucesso!");
+        GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
     public void gerarRelatorios(Scanner sc) {
