@@ -7,6 +7,7 @@ import sistema.GerenciadorDeArquivos;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.Duration;
+import sistema.ValidadorDeEntrada;
 
 public class Hospital {
     private ArrayList<Paciente> pacientes;
@@ -47,10 +48,8 @@ public class Hospital {
 
     public void cadastrarPaciente(Scanner sc) {
         System.out.println("--- Cadastro de Paciente ---");
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
-        System.out.print("CPF: ");
-        String cpf = sc.nextLine();
+        String nome = ValidadorDeEntrada.lerApenasTexto(sc, "Nome: ");
+        String cpf = ValidadorDeEntrada.lerApenasNumeros(sc, "CPF: ");
 
         int idade = 0;
         boolean entradaValida = false;
@@ -96,10 +95,8 @@ public class Hospital {
 
     public void cadastrarMedico(Scanner sc) {
         System.out.println("\n--- Cadastro de Médico ---");
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
-        System.out.print("CRM: ");
-        String crm = sc.nextLine();
+        String nome = ValidadorDeEntrada.lerApenasTexto(sc, "Nome: ");
+        String crm = ValidadorDeEntrada.lerApenasNumeros(sc, "CRM: ");
         System.out.print("Especialidade: ");
         String especialidade = sc.nextLine();
         System.out.print("Custo da consulta: ");
@@ -114,7 +111,7 @@ public class Hospital {
     public void cadastrarPlano(Scanner sc) {
         System.out.println("\n--- Cadastro de Plano de Saúde ---");
         System.out.print("Nome do plano: ");
-        String nome = sc.nextLine();
+        String nome = ValidadorDeEntrada.lerStringNaoVazia(sc, "Nome do plano: ");
         PlanoSaude plano = new PlanoSaude(nome);
         while (true) {
             System.out.print("Deseja adicionar um desconto para uma especialidade? (s/n): ");
@@ -122,7 +119,7 @@ public class Hospital {
                 break;
             }
             System.out.print("Digite a especialidade: ");
-            String especialidade = sc.nextLine();
+            String especialidade = ValidadorDeEntrada.lerStringNaoVazia(sc, "Digite a especialidade: ");
             System.out.print("Digite o percentual de desconto (ex: 20 para 20%): ");
             double desconto = sc.nextDouble();
             sc.nextLine();
