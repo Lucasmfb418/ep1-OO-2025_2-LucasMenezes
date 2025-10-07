@@ -22,6 +22,8 @@ public class Hospital {
     private final String camConsultas = "data/consultas.txt";
     private final String camInternacoes = "data/internacoes.txt";
 
+    private static final DateTimeFormatter FORMATADOR_ENTRADA_USUARIO = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     public Hospital(){
         pacientes = new ArrayList<>();
         medicos = new ArrayList<>();
@@ -193,8 +195,7 @@ public class Hospital {
 
         System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
         String dataHoraStr = sc.nextLine();
-        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-
+        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Local da consulta: ");
         String local = sc.nextLine();
 
@@ -318,8 +319,7 @@ public class Hospital {
 
         System.out.print("Data de entrada (dd-MM-yyyy HH:mm): ");
         String dtStr = sc.nextLine();
-        LocalDateTime entrada = LocalDateTime.parse(dtStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-
+        LocalDateTime entrada = LocalDateTime.parse(dtStr, FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Custo da internação: ");
         double custo = sc.nextDouble();
         sc.nextLine();
@@ -351,8 +351,7 @@ public class Hospital {
 
         System.out.print("Data de saída (dd-MM-yyyy HH:mm): ");
         String dtStr = sc.nextLine();
-        LocalDateTime saida = LocalDateTime.parse(dtStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-
+        LocalDateTime saida = LocalDateTime.parse(dtStr, FORMATADOR_ENTRADA_USUARIO);
         ativas.get(idx).setDataSaida(saida);
         ativas.get(idx).setStatus("Encerrada");
         Paciente pacienteDaInternacao = ativas.get(idx).getPaciente();
