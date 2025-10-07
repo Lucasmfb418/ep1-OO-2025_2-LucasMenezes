@@ -1,68 +1,145 @@
 
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import servicos.Hospital;
+
 public class Main {
+
+    private static void exibirMenuPrincipal() {
+        System.out.println("\n*************************************************");
+        System.out.println("*        SISTEMA DE GERENCIAMENTO HOSPITALAR      *");
+        System.out.println("***************************************************");
+        System.out.println("|                                                 |");
+        System.out.println("| 1. Cadastros                                    |");
+        System.out.println("| 2. Agendamento e Consultas                      |");
+        System.out.println("| 3. Gerenciar Internações                        |");
+        System.out.println("| 4. Exibir Relatórios                            |");
+        System.out.println("|                                                 |");
+        System.out.println("| 0. Sair do Sistema                              |");
+        System.out.println("***************************************************");
+        System.out.print("--> Escolha uma opção: ");
+    }
+
+    private static void exibirSubMenuCadastros() {
+        System.out.println("\n*************************************************");
+        System.out.println("*                MENU DE CADASTROS                *");
+        System.out.println("***************************************************");
+        System.out.println("|                                                 |");
+        System.out.println("| 1. Cadastrar Paciente                           |");
+        System.out.println("| 2. Cadastrar Médico                             |");
+        System.out.println("| 3. Cadastrar Plano de Saúde                     |");
+        System.out.println("|                                                 |");
+        System.out.println("| 0. Voltar ao Menu Principal                     |");
+        System.out.println("***************************************************");
+        System.out.print("--> Escolha uma opção: ");
+    }
+
+    private static void exibirSubMenuConsultas() {
+        System.out.println("\n*************************************************");
+        System.out.println("*                MENU DE CONSULTAS                *");
+        System.out.println("***************************************************");
+        System.out.println("|                                                 |");
+        System.out.println("| 1. Agendar Nova Consulta                        |");
+        System.out.println("| 2. Concluir Consulta / Registrar Diagnóstico    |");
+        System.out.println("|                                                 |");
+        System.out.println("| 0. Voltar ao Menu Principal                     |");
+        System.out.println("***************************************************");
+        System.out.print("--> Escolha uma opção: ");
+    }
+
+    private static void exibirSubMenuInternacoes() {
+        System.out.println("\n*************************************************");
+        System.out.println("*               MENU DE INTERNAÇÕES               *");
+        System.out.println("***************************************************");
+        System.out.println("|                                                 |");
+        System.out.println("| 1. Registrar Nova Internação                    |");
+        System.out.println("| 2. Encerrar Internação (Dar alta)               |");
+        System.out.println("| 3. Cancelar Internação                          |");
+        System.out.println("|                                                 |");
+        System.out.println("| 0. Voltar ao Menu Principal                     |");
+        System.out.println("***************************************************");
+        System.out.print("--> Escolha uma opção: ");
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Hospital hospital = new Hospital();
-
         hospital.carregarDados();
 
-        int opcao = -1;
-
-        while (opcao != 0) {
-            System.out.println("\n=== Sistema Hospitalar ===");
-            System.out.println("1. Cadastrar Paciente");
-            System.out.println("2. Cadastrar Médico");
-            System.out.println("3. Cadastrar Plano de Saúde");
-            System.out.println("4. Agendar Consulta");
-            System.out.println("5. Concluir Consulta / Registrar Diagnóstico");
-            System.out.println("6. Internações");
-            System.out.println("7. Relatórios");
-            System.out.println("0. Sair");
-            System.out.print("Escolha uma opção: ");
-
-            try{
-                opcao = scanner.nextInt();
-                scanner.nextLine();
-
-                switch(opcao) {
-                    case 1:
-                        hospital.cadastrarPaciente(scanner);
-                        break;
-                    case 2:
-                        hospital.cadastrarMedico(scanner);
-                        break;
-                    case 3:
-                        hospital.cadastrarPlano(scanner);
-                        break;
-                    case 4:
-                        hospital.agendarConsulta(scanner);
-                        break;
-                    case 5:
-                        hospital.concluirConsulta(scanner);
-                        break;
-                    case 6:
-                        hospital.gerenciarInternacoes(scanner);
-                        break;
-                    case 7:
-                        hospital.gerarRelatorios(scanner);
-                        break;
-                    case 0:
-                        System.out.println("Saindo do sistema...");
-                        break;
-                    default:
-                        System.out.println("Opção inválida! Tente novamente.");
+        int opcaoPrincipal = -1;
+        while (opcaoPrincipal != 0) {
+            exibirMenuPrincipal();
+            try {
+                opcaoPrincipal = Integer.parseInt(scanner.nextLine());
+                switch (opcaoPrincipal) {
+                    case 1: gerenciarMenuCadastros(scanner, hospital); break;
+                    case 2: gerenciarMenuConsultas(scanner, hospital); break;
+                    case 3: gerenciarMenuInternacoes(scanner, hospital); break;
+                    case 4: hospital.gerarRelatorios(scanner); break;
+                    case 0: System.out.println("\nSaindo do sistema..."); break;
+                    default: System.out.println("\nATENÇÃO: Opção inválida!");
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("\nERRO: Entrada inválida. Por favor, digite apenas um dos NÚMEROS do menu.");
-                scanner.nextLine();
-                opcao = -1;
+            } catch (NumberFormatException e) {
+                System.out.println("\nERRO: Digite apenas um dos NÚMEROS do menu.");
             }
         }
-
         scanner.close();
+        System.out.println("Programa finalizado.");
+    }
+
+    private static void gerenciarMenuCadastros(Scanner scanner, Hospital hospital) {
+        int opcao = -1;
+        while (opcao != 0) {
+            exibirSubMenuCadastros();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+                switch (opcao) {
+                    case 1: hospital.cadastrarPaciente(scanner); break;
+                    case 2: hospital.cadastrarMedico(scanner); break;
+                    case 3: hospital.cadastrarPlano(scanner); break;
+                    case 0: break;
+                    default: System.out.println("\nATENÇÃO: Opção inválida!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERRO: Digite apenas um dos NÚMEROS do menu.");
+            }
+        }
+    }
+
+    private static void gerenciarMenuConsultas(Scanner scanner, Hospital hospital) {
+        int opcao = -1;
+        while (opcao != 0) {
+            exibirSubMenuConsultas();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+                switch (opcao) {
+                    case 1: hospital.agendarConsulta(scanner); break;
+                    case 2: hospital.concluirConsulta(scanner); break;
+                    case 0: break;
+                    default: System.out.println("\nATENÇÃO: Opção inválida!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERRO: Digite apenas um dos NÚMEROS do menu.");
+            }
+        }
+    }
+
+    private static void gerenciarMenuInternacoes(Scanner scanner, Hospital hospital) {
+        int opcao = -1;
+        while (opcao != 0) {
+            exibirSubMenuInternacoes();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+                switch (opcao) {
+                    case 1: hospital.registrarInternacao(scanner); break;
+                    case 2: hospital.encerrarInternacao(scanner); break;
+                    case 3: hospital.cancelarInternacao(scanner); break;
+                    case 0: break;
+                    default: System.out.println("\nATENÇÃO: Opção inválida!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERRO: Digite apenas um dos NÚMEROS do menu.");
+            }
+        }
     }
 }

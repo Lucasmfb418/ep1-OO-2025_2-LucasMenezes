@@ -1,2 +1,1 @@
-Amil;Pediatra;10.0;Neurocirurgi�o;30.0;true
-Bradesco Sa�de;Pediatra;10.0;Neurocirurgi�o;40.0;false
+Plano Amil;Pediatria;10.0;Urologista;10.0;true

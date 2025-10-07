@@ -1,2 +1,2 @@
-Laura Brito;358123;Neurocirurgi�o;500.0
-Jorje Beijamin;423676;Prdiatra;300.0
+Jose Alencar;098234;Pediatria;500.0
+Pedro Laphace;402289;Urologista;900.0

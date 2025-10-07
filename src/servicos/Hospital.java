@@ -114,7 +114,6 @@ public class Hospital {
 
     public void cadastrarPlano(Scanner sc) {
         System.out.println("\n--- Cadastro de Plano de Saúde ---");
-        System.out.print("Nome do plano: ");
         String nome = ValidadorDeEntrada.lerStringNaoVazia(sc, "Nome do plano: ");
         PlanoSaude plano = new PlanoSaude(nome);
         while (true) {
@@ -193,9 +192,7 @@ public class Hospital {
             }
         }
 
-        System.out.print("Data e hora (dd/MM/yyyy HH:mm): ");
-        String dataHoraStr = sc.nextLine();
-        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, FORMATADOR_ENTRADA_USUARIO);
+        LocalDateTime dataHora = ValidadorDeEntrada.lerDataHora(sc, "Data e hora (dd/MM/yyyy HH:mm): ", FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Local da consulta: ");
         String local = sc.nextLine();
 
@@ -261,31 +258,7 @@ public class Hospital {
         GerenciadorDeArquivos.salvarConsultas(camConsultas, consultas);
     }
 
-    public void gerenciarInternacoes(Scanner sc) {
-        System.out.println("\n--- Internações ---");
-        System.out.println("1. Registrar internação");
-        System.out.println("2. Encerrar internação");
-        System.out.println("3. Cancelar internação");
-        System.out.print("Escolha uma opção: ");
-        int opcao = sc.nextInt();
-        sc.nextLine();
-
-        switch(opcao) {
-            case 1:
-                registrarInternacoes(sc);
-                break;
-            case 2:
-                encerrarInternacoes(sc);
-                break;
-            case 3:
-                cancelarInternacoes(sc);
-                break;
-            default:
-                System.out.println("Opção inválida!");
-        }
-    }
-
-    private void registrarInternacoes(Scanner sc) {
+    public void registrarInternacao (Scanner sc) {
         if(pacientes.isEmpty() || medicos.isEmpty()) {
             System.out.println("É necessário cadastrar pacientes e médicos primeiro!");
             return;
@@ -317,9 +290,7 @@ public class Hospital {
             }
         }
 
-        System.out.print("Data de entrada (dd/MM/yyyy HH:mm): ");
-        String dtStr = sc.nextLine();
-        LocalDateTime entrada = LocalDateTime.parse(dtStr, FORMATADOR_ENTRADA_USUARIO);
+        LocalDateTime entrada = ValidadorDeEntrada.lerDataHora(sc, "Data de entrada (dd/MM/yyyy HH:mm): ", FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Custo da internação: ");
         double custo = sc.nextDouble();
         sc.nextLine();
@@ -330,7 +301,7 @@ public class Hospital {
         GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
-    private void encerrarInternacoes(Scanner sc) {
+    public void encerrarInternacao(Scanner sc) {
         ArrayList<Internacao> ativas = new ArrayList<>();
         for(Internacao i : internacoes) {
             if(i.getStatus().equals("Ativa")) ativas.add(i);
@@ -348,10 +319,7 @@ public class Hospital {
         System.out.print("Escolha a internação pelo índice: ");
         int idx = sc.nextInt();
         sc.nextLine();
-
-        System.out.print("Data de saída (dd-MM-yyyy HH:mm): ");
-        String dtStr = sc.nextLine();
-        LocalDateTime saida = LocalDateTime.parse(dtStr, FORMATADOR_ENTRADA_USUARIO);
+        LocalDateTime saida = ValidadorDeEntrada.lerDataHora(sc, "Data de saída (dd/MM/yyyy HH:mm): ", FORMATADOR_ENTRADA_USUARIO);
         ativas.get(idx).setDataSaida(saida);
         ativas.get(idx).setStatus("Encerrada");
         Paciente pacienteDaInternacao = ativas.get(idx).getPaciente();
@@ -370,7 +338,7 @@ public class Hospital {
         GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
-    private void cancelarInternacoes(Scanner sc) {
+    public void cancelarInternacao (Scanner sc) {
         if(internacoes.isEmpty()) {
             System.out.println("Não há internações cadastradas!");
             return;

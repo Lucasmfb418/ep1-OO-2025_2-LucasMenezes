@@ -1,5 +1,8 @@
 package sistema;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class ValidadorDeEntrada {
@@ -53,5 +56,19 @@ public class ValidadorDeEntrada {
                 System.out.println("ERRO: Entrada inválida. Por favor, digite um número (ex: 20 ou 15.5).");
             }
         }
+    }
+
+    public static LocalDateTime lerDataHora(Scanner sc, String mensagem, DateTimeFormatter formatador) {
+        LocalDateTime dataHora = null;
+        while (dataHora == null) {
+            System.out.print(mensagem);
+            String entrada = sc.nextLine();
+            try {
+                dataHora = LocalDateTime.parse(entrada, formatador);
+            } catch (DateTimeParseException e) {
+                System.out.println("ERRO: Formato de data inválido! Por favor, use o formato " + "dd/MM/yyyy HH:mm.");
+            }
+        }
+        return dataHora;
     }
 }
