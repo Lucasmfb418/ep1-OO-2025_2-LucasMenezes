@@ -17,7 +17,7 @@ public class Consulta{
         this.medico = medico;
         this.dataHora = dataHora;
         this.local = local;
-        this.status = "Agenda";
+        this.status = "Agendada";
         this.diagnostico = "";
         this.prescricao = "";
         this.valorEconomizado = 0.0;
