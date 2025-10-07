@@ -6,10 +6,11 @@ import java.util.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class GerenciadorDeArquivos {
 
-    private static final DateTimeFormatter FORMATADOR_DATA_HORA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATADOR_DATA_HORA_ARQUIVO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 public static ArrayList<Paciente> carregarPacientes(String cam, ArrayList<PlanoSaude> planos) {
     ArrayList<Paciente> lista = new ArrayList<>();
@@ -129,11 +130,13 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
                 String[] dados = linha.split(";");
                 String cpfPaciente = dados[0];
                 String crmMedico = dados[1];
-                LocalDateTime dt = LocalDateTime.parse(dados[2], FORMATADOR_DATA_HORA);
+                LocalDateTime dt = LocalDateTime.parse(dados[2], FORMATADOR_DATA_HORA_ARQUIVO);
                 String local = dados[3];
                 String status = dados[4];
                 String diag = dados[5];
                 String presc = dados[6];
+                double valorEconomizado = Double.parseDouble(dados[7]);
+
 
                 Paciente p = pacientes.stream().filter(pa -> pa.getCpf().equals(cpfPaciente)).findFirst().orElse(null);
                 Medico m = medicos.stream().filter(me -> me.getCrm().equals(crmMedico)).findFirst().orElse(null);
@@ -142,19 +145,20 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
                     c.setStatus(status);
                     c.setDiagnostico(diag);
                     c.setPrescricao(presc);
+                    c.setValorEconomizado(valorEconomizado);
                     lista.add(c);
+
                 }
             }
-        } catch(IOException e){
-            System.out.println("Arquivo de consultas não encontrado, será criado ao salvar.");
-        }
-        return lista;
+        } catch(IOException | DateTimeParseException | NumberFormatException e){
+    }
+    return lista;
     }
 
     public static void salvarConsultas(String cam, ArrayList<Consulta> consultas){
         try(PrintWriter pw = new PrintWriter(new FileWriter(cam))){
             for(Consulta c : consultas){
-                pw.println(c.getPaciente().getCpf() + ";" + c.getMedico().getCrm() + ";" + c.getDataHora().format(FORMATADOR_DATA_HORA) + ";" + c.getLocal() + ";" + c.getStatus() + ";" + c.getDiagnostico() + ";" + c.getPrescricao());
+                pw.println(c.getPaciente().getCpf() + ";" + c.getMedico().getCrm() + ";" + c.getDataHora().format(FORMATADOR_DATA_HORA_ARQUIVO) + ";" + c.getLocal() + ";" + c.getStatus() + ";" + c.getDiagnostico() + ";" + c.getPrescricao() + ";" + c.getValorEconomizado());
             }
         } catch(IOException e){
             System.out.println("Erro ao salvar consultas: " + e.getMessage());
@@ -169,7 +173,7 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
                 String[] dados = linha.split(";");
                 String cpfPaciente = dados[0];
                 String crmMedico = dados[1];
-                LocalDateTime entrada = LocalDateTime.parse(dados[2], FORMATADOR_DATA_HORA);
+                LocalDateTime entrada = LocalDateTime.parse(dados[2], FORMATADOR_DATA_HORA_ARQUIVO);
                 LocalDateTime saida = dados[3].equals("null") ? null : LocalDateTime.parse(dados[3], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                 String quarto = dados[4];
                 double custo = Double.parseDouble(dados[5]);
@@ -192,7 +196,15 @@ public static void salvarPacientes(String cam, ArrayList<Paciente> pacientes) {
     public static void salvarInternacoes(String cam, ArrayList<Internacao> internacoes){
         try(PrintWriter pw = new PrintWriter(new FileWriter(cam))){
             for(Internacao i : internacoes){
-                pw.println(i.getPaciente().getCpf() + ";" + i.getMedicoResponsavel().getCrm() + ";" + i.getDataEntrada().format(FORMATADOR_DATA_HORA) + ";" + (i.getDataSaida()==null ? "null" : i.getDataSaida().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))) + ";" + i.getQuarto() + ";" + i.getCusto() + ";" + i.getStatus());
+                String dataSaidaStr = i.getDataSaida() == null ? "null" : i.getDataSaida().format(FORMATADOR_DATA_HORA_ARQUIVO);
+            
+                pw.println(i.getPaciente().getCpf() + ";" + 
+                        i.getMedicoResponsavel().getCrm() + ";" + 
+                        i.getDataEntrada().format(FORMATADOR_DATA_HORA_ARQUIVO) + ";" + 
+                        dataSaidaStr + ";" + 
+                        i.getQuarto() + ";" + 
+                        i.getCusto() + ";" + 
+                        i.getStatus());
             }
         } catch(IOException e){
             System.out.println("Erro ao salvar internações: " + e.getMessage());

@@ -193,7 +193,7 @@ public class Hospital {
             }
         }
 
-        System.out.print("Data e hora (dd-MM-yyyy HH:mm): ");
+        System.out.print("Data e hora (dd/MM/yyyy HH:mm): ");
         String dataHoraStr = sc.nextLine();
         LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Local da consulta: ");
@@ -317,7 +317,7 @@ public class Hospital {
             }
         }
 
-        System.out.print("Data de entrada (dd-MM-yyyy HH:mm): ");
+        System.out.print("Data de entrada (dd/MM/yyyy HH:mm): ");
         String dtStr = sc.nextLine();
         LocalDateTime entrada = LocalDateTime.parse(dtStr, FORMATADOR_ENTRADA_USUARIO);
         System.out.print("Custo da internação: ");
