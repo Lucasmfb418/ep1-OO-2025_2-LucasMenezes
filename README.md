@@ -55,15 +55,16 @@ Prints da Execução
 
 Menu Principal:
 
-![](2025-10-08-16-33-17.png)
+<img width="491" height="297" alt="image" src="https://github.com/user-attachments/assets/b01f429c-1a9d-4319-abaf-530260c1c8c6" />
 
 Cadastro de Médico:
 
-![](2025-10-08-16-37-06.png)
+<img width="513" height="419" alt="image" src="https://github.com/user-attachments/assets/ea5e681b-8ad1-4c49-afac-b3ec06f264cc" />
 
 Relatório de ?:
 
-![](2025-10-08-16-41-25.png)
+<img width="507" height="936" alt="image" src="https://github.com/user-attachments/assets/af12dcb9-604f-499b-855e-e4b0dea71824" />
+
 
 Observações (Extras ou Dificuldades)
 
