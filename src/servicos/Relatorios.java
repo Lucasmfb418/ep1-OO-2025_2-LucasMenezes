@@ -9,37 +9,7 @@ import entidades.*;
 
 public class Relatorios {
 
-    public static void gerarMenuRelatorios(ArrayList<Paciente> pacientes, ArrayList<Medico> medicos,
-                                           ArrayList<Consulta> consultas, ArrayList<Internacao> internacoes,
-                                           ArrayList<PlanoSaude> planos, Scanner sc) {
-        int opcao = -1;
-        while(opcao != 0) {
-            System.out.println("\n--- Menu Relatórios ---");
-            System.out.println("1. Pacientes cadastrados");
-            System.out.println("2. Médicos cadastrados");
-            System.out.println("3. Consultas futuras e passadas");
-            System.out.println("4. Pacientes internados no momento");
-            System.out.println("5. Estatísticas gerais");
-            System.out.println("6. Pessoas por plano de saúde");
-            System.out.println("0. Voltar");
-            System.out.print("Escolha uma opção: ");
-            opcao = sc.nextInt();
-            sc.nextLine();
-
-            switch(opcao) {
-                case 1: listarPacientes(pacientes); break;
-                case 2: listarMedicos(medicos); break;
-                case 3: listarConsultas(consultas, sc); break;
-                case 4: listarInternados(internacoes); break;
-                case 5: gerarEstatisticas(medicos, consultas); break;
-                case 6: pessoasPorPlano(planos, pacientes); break;
-                case 0: break;
-                default: System.out.println("Opção inválida!"); break;
-            }
-        }
-    }
-
-    private static void listarPacientes(ArrayList<Paciente> pacientes) {
+    public static void listarPacientes(ArrayList<Paciente> pacientes) {
         System.out.println("\n--- Pacientes Cadastrados ---");
         for(Paciente p : pacientes) {
             System.out.println("Nome: " + p.getNome() + ", CPF: " + p.getCpf() + ", Idade: " + p.getIdade());
@@ -48,7 +18,7 @@ public class Relatorios {
         }
     }
 
-    private static void listarMedicos(ArrayList<Medico> medicos) {
+    public static void listarMedicos(ArrayList<Medico> medicos) {
         System.out.println("\n--- Médicos Cadastrados ---");
         for(Medico m : medicos) {
             System.out.println("Nome: " + m.getNome() + ", CRM: " + m.getCrm() + ", Especialidade: " + m.getEspecialidade());
@@ -56,7 +26,7 @@ public class Relatorios {
         }
     }
 
-    private static void listarConsultas(ArrayList<Consulta> consultas, Scanner sc) {
+    public static void listarConsultas(ArrayList<Consulta> consultas, Scanner sc) {
         System.out.println("\n--- Consultas ---");
         System.out.println("Filtrar por: 1-Paciente 2-Médico 3-Especialidade 0-Sem filtro");
         int filtro = sc.nextInt();
@@ -88,7 +58,7 @@ public class Relatorios {
         }
     }
 
-    private static void listarInternados(ArrayList<Internacao> internacoes) {
+    public static void listarInternados(ArrayList<Internacao> internacoes) {
         System.out.println("\n--- Pacientes Internados ---");
         for(Internacao i : internacoes) {
             if(i.getStatus().equals("Ativa")) {
@@ -101,7 +71,7 @@ public class Relatorios {
         }
     }
 
-    private static void gerarEstatisticas(ArrayList<Medico> medicos, ArrayList<Consulta> consultas) {
+    public static void gerarEstatisticas(ArrayList<Medico> medicos, ArrayList<Consulta> consultas) {
         System.out.println("\n--- Estatísticas Gerais ---");
 
         Medico top = null;
@@ -126,7 +96,7 @@ public class Relatorios {
         System.out.println("Especialidade mais procurada: " + topEsp);
     }
 
-    private static void pessoasPorPlano(ArrayList<PlanoSaude> planos, ArrayList<Paciente> pacientes) {
+    public static void pessoasPorPlano(ArrayList<PlanoSaude> planos, ArrayList<Paciente> pacientes) {
         System.out.println("\n--- Pessoas por Plano de Saúde ---");
         for(PlanoSaude p : planos) {
             long count = pacientes.stream().filter(pa -> pa instanceof PacienteEspecial && ((PacienteEspecial)pa).getPlano().equals(p)).count();
@@ -142,6 +112,44 @@ public class Relatorios {
             System.out.println("Plano: " + p.getNome());
             System.out.println("  - Quantidade de pessoas: " + count);
             System.out.printf("  - Total economizado pelos usuários: R$ %.2f\n\n", totalEconomizado);
+        }
+    }
+
+    public static void gerarEstatisticasAvancadas(ArrayList<Internacao> internacoes, ArrayList<Medico> medicos) {
+        System.out.println("\n--- Estatísticas Avançadas ---");
+
+        long totalDias = 0;
+        int internacoesEncerradas = 0;
+        for (Internacao i : internacoes) {
+            if (i.getStatus().equals("Encerrada") && i.getDataSaida() != null) {
+                Duration duracao = Duration.between(i.getDataEntrada(), i.getDataSaida());
+                totalDias += duracao.toDays();
+                internacoesEncerradas++;
+            }
+        }
+
+        if (internacoesEncerradas > 0) {
+            double mediaDias = (double) totalDias / internacoesEncerradas;
+            System.out.printf("Tempo médio de internação (dias): %.2f\n", mediaDias);
+        } else {
+            System.out.println("Tempo médio de internação (dias): Não há internações encerradas para calcular.");
+        }
+
+        System.out.println("\nOcupação atual por especialidade (pacientes internados):");
+        Map<String, Integer> ocupacaoPorEspecialidade = new HashMap<>();
+        for (Internacao i : internacoes) {
+            if (i.getStatus().equals("Ativa")) {
+                String especialidade = i.getMedicoResponsavel().getEspecialidade();
+                ocupacaoPorEspecialidade.put(especialidade, ocupacaoPorEspecialidade.getOrDefault(especialidade, 0) + 1);
+            }
+        }
+
+        if (ocupacaoPorEspecialidade.isEmpty()) {
+            System.out.println("  - Nenhum paciente internado no momento.");
+        } else {
+            for (Map.Entry<String, Integer> entry : ocupacaoPorEspecialidade.entrySet()) {
+                System.out.println("  - " + entry.getKey() + ": " + entry.getValue() + " paciente(s)");
+            }
         }
     }
 }

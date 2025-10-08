@@ -357,7 +357,31 @@ public class Hospital {
         GerenciadorDeArquivos.salvarInternacoes(camInternacoes, internacoes);
     }
 
-    public void gerarRelatorios(Scanner sc) {
-        Relatorios.gerarMenuRelatorios(pacientes, medicos, consultas, internacoes, planos, sc);
+    public void relatorioListarPacientes() {
+    Relatorios.listarPacientes(pacientes);
+    }
+
+    public void relatorioListarMedicos() {
+        Relatorios.listarMedicos(medicos);
+    }
+
+    public void relatorioListarConsultas(Scanner sc) {
+        Relatorios.listarConsultas(consultas, sc);
+    }
+
+    public void relatorioListarInternados() {
+        Relatorios.listarInternados(internacoes);
+    }
+
+    public void relatorioEstatisticasGerais() {
+        Relatorios.gerarEstatisticas(medicos, consultas);
+    }
+
+    public void relatorioPessoasPorPlano() {
+        Relatorios.pessoasPorPlano(planos, pacientes);
+    }
+
+    public void relatorioEstatisticasAvancadas() {
+        Relatorios.gerarEstatisticasAvancadas(internacoes, medicos);
     }
 }

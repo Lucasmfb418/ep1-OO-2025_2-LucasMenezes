@@ -61,6 +61,24 @@ public class Main {
         System.out.print("--> Escolha uma opção: ");
     }
 
+    private static void exibirSubMenuRelatorios() {
+        System.out.println("\n*************************************************");
+        System.out.println("*                MENU DE RELATÓRIOS               *");
+        System.out.println("***************************************************");
+        System.out.println("|                                                 |");
+        System.out.println("| 1. Listar Pacientes Cadastrados                 |");
+        System.out.println("| 2. Listar Médicos Cadastrados                   |");
+        System.out.println("| 3. Listar Consultas                             |");
+        System.out.println("| 4. Listar Pacientes Internados                  |");
+        System.out.println("| 5. Estatísticas Gerais                          |");
+        System.out.println("| 6. Análise por Plano de Saúde                   |");
+        System.out.println("| 7. Estatísticas Avançadas                       |");
+        System.out.println("|                                                 |");
+        System.out.println("| 0. Voltar ao Menu Principal                     |");
+        System.out.println("***************************************************");
+        System.out.print("--> Escolha uma opção: ");
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Hospital hospital = new Hospital();
@@ -75,7 +93,7 @@ public class Main {
                     case 1: gerenciarMenuCadastros(scanner, hospital); break;
                     case 2: gerenciarMenuConsultas(scanner, hospital); break;
                     case 3: gerenciarMenuInternacoes(scanner, hospital); break;
-                    case 4: hospital.gerarRelatorios(scanner); break;
+                    case 4: gerenciarMenuRelatorios(scanner, hospital); break;
                     case 0: System.out.println("\nSaindo do sistema..."); break;
                     default: System.out.println("\nATENÇÃO: Opção inválida!");
                 }
@@ -134,6 +152,29 @@ public class Main {
                     case 1: hospital.registrarInternacao(scanner); break;
                     case 2: hospital.encerrarInternacao(scanner); break;
                     case 3: hospital.cancelarInternacao(scanner); break;
+                    case 0: break;
+                    default: System.out.println("\nATENÇÃO: Opção inválida!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERRO: Digite apenas um dos NÚMEROS do menu.");
+            }
+        }
+    }
+
+     private static void gerenciarMenuRelatorios(Scanner scanner, Hospital hospital) {
+        int opcao = -1;
+        while (opcao != 0) {
+            exibirSubMenuRelatorios();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+                switch (opcao) {
+                    case 1: hospital.relatorioListarPacientes(); break;
+                    case 2: hospital.relatorioListarMedicos(); break;
+                    case 3: hospital.relatorioListarConsultas(scanner); break;
+                    case 4: hospital.relatorioListarInternados(); break;
+                    case 5: hospital.relatorioEstatisticasGerais(); break;
+                    case 6: hospital.relatorioPessoasPorPlano(); break;
+                    case 7: hospital.relatorioEstatisticasAvancadas(); break;
                     case 0: break;
                     default: System.out.println("\nATENÇÃO: Opção inválida!");
                 }
