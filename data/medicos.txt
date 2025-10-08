@@ -1,2 +1,3 @@
 Jose Alencar;098234;Pediatria;500.0
 Pedro Laphace;402289;Urologista;900.0
+Mateus Rosa;56678;Clinico Geral;400.0
