@@ -1,2 +1,4 @@
 241012300;098234;2025-01-20 20:40;Gama Leste;Concluída;COVID19;Invermectina;0.0
 099256;098234;2026-02-01 07:15;Asa Sul;Agendada;;;100.0
+1234;56678;2005-02-20 20:30;Asa Norte;Agendada;;;0.0
+241012300;12345;2030-03-20 19:30;Gama;Concluída;Gripe;ODioirona;0.0

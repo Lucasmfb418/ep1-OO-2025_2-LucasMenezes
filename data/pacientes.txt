@@ -1,2 +1,3 @@
 Comum;Lucas Menezes;241012300;20
 Especial;Sabrina Matos;099256;60;Plano Amil
+Especial;Julio;1234;30;Plano Amil
