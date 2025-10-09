@@ -50,7 +50,8 @@ Versão do JAVA utilizada:
 
 Vídeo de Demonstração
 
-https://drive.google.com/file/d/1lxlzR4QIiJ6x15dv7O622HgyY0L788J-/view?usp=sharing
+https://drive.google.com/file/d/1CoPoGsCldu81Pd7DPrAMN-771a-LqQUO/view?usp=sharing
+
 Prints da Execução
 
 Menu Principal:
